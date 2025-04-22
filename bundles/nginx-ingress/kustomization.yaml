@@ -8,4 +8,4 @@ patches:
       kind: Deployment
       name: ingress-nginx-controller
       namespace: ingress-nginx
-    path: nginx-resources-patch.yaml
+    path: patches/nginx-resources-patch.yaml
