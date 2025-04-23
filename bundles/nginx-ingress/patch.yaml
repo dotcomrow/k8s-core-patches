@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: patch-nginx-deployment
+  generateName: patch-nginx-deployment-
   namespace: ingress-nginx
 spec:
   template:
