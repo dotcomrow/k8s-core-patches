@@ -16,7 +16,7 @@ spec:
             echo "Patching ingress-nginx-controller deployment..."
             kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
               --type=merge \
-              -p '{"spec":{"template":{"spec":{"containers":[{"name":"controller","resources":{"requests":{"cpu":"100m","memory":"128Mi"},"limits":{"cpu":"500m","memory":"512Mi"}}}]}}}}'
+              -p '{"spec":{"template":{"spec":{"containers":[{"name":"controller","resources":{"requests":{"cpu":"100m","memory":"128Mi"},"limits":{"cpu":"2000m","memory":"1Gi"}}}]}}}}'
         env:
           - name: KUBECONFIG
             value: /etc/rancher/rke2/rke2.yaml
