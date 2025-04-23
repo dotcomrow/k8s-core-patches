@@ -1,30 +1,32 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: patch-nginx-deployment-
+  name: patch-nginx-deployment
   namespace: ingress-nginx
 spec:
+  backoffLimit: 0
   template:
     spec:
       containers:
-      - name: patch
-        image: bitnami/kubectl:latest
-        command:
-          - /bin/sh
-          - -c
-          - |
-            echo "Patching ingress-nginx-controller deployment..."
-            kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
-              --type=merge \
-              -p '{"spec":{"template":{"spec":{"containers":[{"name":"controller","resources":{"requests":{"cpu":"100m","memory":"128Mi"},"limits":{"cpu":"2000m","memory":"1Gi"}}}]}}}}'
-        env:
-          - name: KUBECONFIG
-            value: /etc/rancher/rke2/rke2.yaml
-        volumeMounts:
-          - name: kubeconfig
-            mountPath: /etc/rancher/rke2
-      restartPolicy: OnFailure
-      volumes:
-      - name: kubeconfig
-        hostPath:
-          path: /etc/rancher/rke2
+        - name: patch
+          image: bitnami/kubectl:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "🔧 Patching Deployment ingress-nginx-controller with Helm metadata and resources..."
+
+              kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
+                --type=merge \
+                -p '{
+                  "metadata": {
+                    "labels": {
+                      "app.kubernetes.io/managed-by": "Helm"
+                    },
+                    "annotations": {
+                      "meta.helm.sh/release-name": "ingress-nginx-controller",
+                      "meta.helm.sh/release-namespace": "ingress-nginx"
+                    }
+                  }
+                }'
+      restartPolicy: Never

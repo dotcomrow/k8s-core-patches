@@ -1,0 +1,9 @@
+resources:
+  - ingress-nginx.yaml
+
+patches:
+  - path: patch-deployment-resources.yaml
+    target:
+      kind: Deployment
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
