@@ -1,3 +1,0 @@
-defaultNamespace: ingress-nginx
-helm:
-  releaseName: ingress-nginx-controller
