@@ -1,3 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: patch-nginx-role
+  namespace: ingress-nginx
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: patch-nginx-binding
+  namespace: ingress-nginx
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ingress-nginx
+roleRef:
+  kind: Role
+  name: patch-nginx-role
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
