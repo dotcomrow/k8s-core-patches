@@ -35,7 +35,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: patch
-          image: lachlanevenson/k8s-kubectl:v1.27.1  # ✅ Works with in-cluster auth
+          image: lachlanevenson/k8s-kubectl:v1.27.1-kubectl
           command:
             - /bin/sh
             - -c
