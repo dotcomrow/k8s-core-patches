@@ -7,11 +7,11 @@ spec:
   backoffLimit: 0
   template:
     spec:
-      serviceAccountName: default  # ✅ Ensure this is set
+      serviceAccountName: default
       automountServiceAccountToken: true
       containers:
         - name: patch
-          image: bitnami/kubectl:1.26.7-debian-11-r0
+          image: lachlanevenson/k8s-kubectl:v1.27.1  # ✅ Works with in-cluster auth
           command:
             - /bin/sh
             - -c
