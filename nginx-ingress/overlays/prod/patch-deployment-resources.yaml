@@ -5,6 +5,9 @@ metadata:
   namespace: ingress-nginx
 spec:
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ingress-nginx  # ✅ Match what's in the base
     spec:
       containers:
         - name: controller
