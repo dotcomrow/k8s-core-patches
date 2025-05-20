@@ -8,10 +8,10 @@ spec:
   template:
     spec:
       serviceAccountName: default  # ✅ Ensure this is set
+      automountServiceAccountToken: true
       containers:
         - name: patch
           image: bitnami/kubectl:1.29
-          automountServiceAccountToken: true
           command:
             - /bin/sh
             - -c
