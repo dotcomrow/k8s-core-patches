@@ -35,7 +35,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: patch
-          image: lachlanevenson/k8s-kubectl:v1.27.1-kubectl
+          image: lachlanevenson/k8s-kubectl:v1.23.0
           command:
             - /bin/sh
             - -c
