@@ -7,17 +7,16 @@ spec:
   backoffLimit: 0
   template:
     spec:
-      serviceAccountName: default
+      serviceAccountName: default  # ✅ Ensure this is set
       containers:
         - name: patch
-          image: bitnami/kubectl:latest
+          image: bitnami/kubectl:1.29
           command:
             - /bin/sh
             - -c
             - |
               echo "🔧 Patching Deployment ingress-nginx-controller with Helm metadata and resources..."
-
-              kubectl patch deployment ingress-nginx-controller -n ingress-nginx  \
+              kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
                 --type=merge \
                 -p '{
                   "metadata": {
