@@ -11,6 +11,7 @@ spec:
       containers:
         - name: patch
           image: bitnami/kubectl:1.29
+          automountServiceAccountToken: true
           command:
             - /bin/sh
             - -c
