@@ -1,9 +1,11 @@
 - op: replace
-  path: /spec/template/spec/containers/0/resources
+  path: /spec/template/spec/containers/0/resources/requests/cpu
+  value: "200m"
+- op: replace
+  path: /spec/template/spec/containers/0/resources/requests/memory
+  value: "768Mi"
+- op: add
+  path: /spec/template/spec/containers/0/resources/limits
   value:
-    requests:
-      cpu: "200m"
-      memory: "768Mi"
-    limits:
-      cpu: "900m"
-      memory: "2Gi"
+    cpu: "900m"
+    memory: "2Gi"
