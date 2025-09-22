@@ -10,4 +10,5 @@ patchesJson6902:
       version: v1
       kind: Deployment
       name: ingress-nginx-controller
+      namespace: ingress-nginx
     path: patch-container-resources.yaml

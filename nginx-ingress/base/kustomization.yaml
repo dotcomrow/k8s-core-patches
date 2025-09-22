@@ -1,15 +1,3 @@
 resources:
   - ingress-nginx-base.yaml
 
-patches:
-  - path: patch.yaml
-    target:
-      kind: Job
-      name: patch-nginx-deployment
-      namespace: ingress-nginx
-  - path: patch-deployment-resources.yaml
-    target:
-      kind: Deployment
-      name: ingress-nginx-controller
-      namespace: ingress-nginx
-
