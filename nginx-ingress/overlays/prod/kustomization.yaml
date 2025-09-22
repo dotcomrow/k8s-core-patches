@@ -2,9 +2,6 @@ resources:
   - ../../base
   - patch.yaml
 
-patches:
-  - path: patch-resources-strategic.yaml
-
 # ArgoCD-specific configurations
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

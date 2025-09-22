@@ -46,7 +46,7 @@ spec:
             - |
               echo "🔧 Waiting for deployment to be ready..."
               kubectl wait --for=condition=available deployment/ingress-nginx-controller -n ingress-nginx --timeout=300s
-              echo "🔧 Patching Deployment ingress-nginx-controller with Helm metadata..."
+              echo "🔧 Patching Deployment ingress-nginx-controller with Helm metadata and resources..."
               kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
                 --type=merge \
                 -p '{
@@ -58,7 +58,28 @@ spec:
                       "meta.helm.sh/release-name": "ingress-nginx-controller",
                       "meta.helm.sh/release-namespace": "ingress-nginx"
                     }
+                  },
+                  "spec": {
+                    "template": {
+                      "spec": {
+                        "containers": [
+                          {
+                            "name": "controller",
+                            "resources": {
+                              "requests": {
+                                "cpu": "200m",
+                                "memory": "768Mi"
+                              },
+                              "limits": {
+                                "cpu": "900m",
+                                "memory": "2Gi"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
                   }
                 }'
-              echo "✅ Patch applied successfully!"
+              echo "✅ Both patches applied successfully!"
       restartPolicy: Never
