@@ -27,8 +27,12 @@ kind: Job
 metadata:
   name: patch-nginx-deployment
   namespace: ingress-nginx
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
 spec:
-  backoffLimit: 0
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
   template:
     spec:
       serviceAccountName: default
@@ -40,7 +44,9 @@ spec:
             - /bin/sh
             - -c
             - |
-              echo "🔧 Patching Deployment ingress-nginx-controller with Helm metadata and resources..."
+              echo "🔧 Waiting for deployment to be ready..."
+              kubectl wait --for=condition=available deployment/ingress-nginx-controller -n ingress-nginx --timeout=300s
+              echo "🔧 Patching Deployment ingress-nginx-controller with Helm metadata..."
               kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
                 --type=merge \
                 -p '{
@@ -54,4 +60,5 @@ spec:
                     }
                   }
                 }'
+              echo "✅ Patch applied successfully!"
       restartPolicy: Never

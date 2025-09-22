@@ -10,3 +10,7 @@ patches:
       name: ingress-nginx-controller
       namespace: ingress-nginx
     path: patch-container-resources.yaml
+
+# ArgoCD-specific configurations
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
