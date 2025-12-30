@@ -84,7 +84,9 @@ data:
 
         if echo "$live" | jq -e --arg name "$cname" '.spec.template.spec.containers[]? | select(.name==$name)' >/dev/null; then
           patch=$(jq -n --arg name "$cname" --arg cpu "$cpu" --arg memory "$memory" '{spec:{template:{spec:{containers:[{name:$name,resources:{requests:{cpu:$cpu,memory:$memory}}}]}}}}')
-          kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$patch"
+          if ! kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$patch"; then
+            echo "Failed to patch $kind/$namespace/$name container $cname (requests: cpu=$cpu memory=$memory)"
+          fi
         else
           echo "Skipping $file container $cname (not found)"
         fi
