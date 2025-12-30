@@ -43,7 +43,7 @@ data:
     : "${GIT_USERNAME:?}"
     : "${GIT_TOKEN:?}"
 
-    apk add --no-cache git ca-certificates >/dev/null
+    apk add --no-cache git ca-certificates jq >/dev/null
 
     WORKDIR="$(mktemp -d)"
     trap 'rm -rf "$WORKDIR"' EXIT
@@ -55,11 +55,40 @@ data:
 
     for file in *.json; do
       [ -e "$file" ] || continue
-      if kubectl get -f "$file" >/dev/null 2>&1; then
-        kubectl apply --server-side --field-manager=vpa-recommendation-applier -f "$file"
-      else
-        echo "Skipping $file (target not found)"
+
+      namespace=$(jq -r '.metadata.namespace // empty' "$file")
+      kind=$(jq -r '.kind // empty' "$file")
+      name=$(jq -r '.metadata.name // empty' "$file")
+
+      if [ -z "$namespace" ] || [ -z "$kind" ] || [ -z "$name" ]; then
+        echo "Skipping $file (missing metadata)"
+        continue
       fi
+
+      if ! kubectl get "$kind" -n "$namespace" "$name" >/dev/null 2>&1; then
+        echo "Skipping $file ($kind/$namespace/$name not found)"
+        continue
+      fi
+
+      live="$(kubectl get "$kind" -n "$namespace" "$name" -o json)"
+
+      jq -c '.spec.template.spec.containers[]?' "$file" | while read -r container; do
+        cname=$(echo "$container" | jq -r '.name // empty')
+        cpu=$(echo "$container" | jq -r '.resources.requests.cpu // empty')
+        memory=$(echo "$container" | jq -r '.resources.requests.memory // empty')
+
+        if [ -z "$cname" ] || [ -z "$cpu" ] || [ -z "$memory" ]; then
+          echo "Skipping $file container (missing fields)"
+          continue
+        fi
+
+        if echo "$live" | jq -e --arg name "$cname" '.spec.template.spec.containers[]? | select(.name==$name)' >/dev/null; then
+          patch=$(jq -n --arg name "$cname" --arg cpu "$cpu" --arg memory "$memory" '{spec:{template:{spec:{containers:[{name:$name,resources:{requests:{cpu:$cpu,memory:$memory}}}]}}}}')
+          kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$patch"
+        else
+          echo "Skipping $file container $cname (not found)"
+        fi
+      done
     done
 ---
 apiVersion: batch/v1
