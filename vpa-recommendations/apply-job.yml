@@ -35,62 +35,157 @@ metadata:
 data:
   apply.sh: |
     #!/bin/sh
-    set -eu
+    set -u
 
-    : "${REPO_URL:?}"
-    : "${REPO_BRANCH:?}"
-    : "${TARGET_DIR:?}"
-    : "${GIT_USERNAME:?}"
-    : "${GIT_TOKEN:?}"
+    log() {
+      printf '%s\n' "$*"
+    }
 
-    apk add --no-cache git ca-certificates jq >/dev/null
+    missing=0
+    if [ -z "${REPO_URL:-}" ]; then log "Missing env: REPO_URL"; missing=1; fi
+    if [ -z "${REPO_BRANCH:-}" ]; then log "Missing env: REPO_BRANCH"; missing=1; fi
+    if [ -z "${TARGET_DIR:-}" ]; then log "Missing env: TARGET_DIR"; missing=1; fi
+    if [ -z "${GIT_USERNAME:-}" ]; then log "Missing env: GIT_USERNAME"; missing=1; fi
+    if [ -z "${GIT_TOKEN:-}" ]; then log "Missing env: GIT_TOKEN"; missing=1; fi
+    if [ "$missing" -eq 1 ]; then
+      log "Missing required env; skipping run"
+      exit 0
+    fi
 
-    WORKDIR="$(mktemp -d)"
+    if ! apk add --no-cache git ca-certificates jq >/dev/null; then
+      log "apk add failed; skipping run"
+      exit 0
+    fi
+
+    WORKDIR="$(mktemp -d)" || { log "mktemp failed"; exit 0; }
     trap 'rm -rf "$WORKDIR"' EXIT
 
     AUTH_URL="https://${GIT_USERNAME}:${GIT_TOKEN}@${REPO_URL#https://}"
-    git clone --branch "${REPO_BRANCH}" "${AUTH_URL}" "${WORKDIR}/repo" >/dev/null
+    if ! git clone --branch "${REPO_BRANCH}" "${AUTH_URL}" "${WORKDIR}/repo" >/dev/null; then
+      log "git clone failed; skipping run"
+      exit 0
+    fi
 
-    cd "${WORKDIR}/repo/${TARGET_DIR}"
+    if ! cd "${WORKDIR}/repo/${TARGET_DIR}" >/dev/null 2>&1; then
+      log "target dir not found: ${TARGET_DIR}"
+      exit 0
+    fi
 
     for file in *.json; do
       [ -e "$file" ] || continue
+
+      if ! jq -e . "$file" >/dev/null 2>&1; then
+        log "Skipping $file (invalid json)"
+        continue
+      fi
 
       namespace=$(jq -r '.metadata.namespace // empty' "$file")
       kind=$(jq -r '.kind // empty' "$file")
       name=$(jq -r '.metadata.name // empty' "$file")
 
       if [ -z "$namespace" ] || [ -z "$kind" ] || [ -z "$name" ]; then
-        echo "Skipping $file (missing metadata)"
+        log "Skipping $file (missing metadata)"
         continue
       fi
 
       if ! kubectl get "$kind" -n "$namespace" "$name" >/dev/null 2>&1; then
-        echo "Skipping $file ($kind/$namespace/$name not found)"
+        log "Skipping $file ($kind/$namespace/$name not found)"
         continue
       fi
 
-      live="$(kubectl get "$kind" -n "$namespace" "$name" -o json)"
+      live="$(kubectl get "$kind" -n "$namespace" "$name" -o json 2>/dev/null || true)"
+      if [ -z "$live" ]; then
+        log "Skipping $file ($kind/$namespace/$name read failed)"
+        continue
+      fi
 
-      jq -c '.spec.template.spec.containers[]?' "$file" | while read -r container; do
+      tmp_containers="$(mktemp)"
+      if ! jq -c '.spec.template.spec.containers[]?' "$file" > "$tmp_containers" 2>/dev/null; then
+        log "Skipping $file (containers parse failed)"
+        rm -f "$tmp_containers"
+        continue
+      fi
+      if [ ! -s "$tmp_containers" ]; then
+        log "Skipping $file (no containers)"
+        rm -f "$tmp_containers"
+        continue
+      fi
+
+      restart_needed=0
+
+      while IFS= read -r container; do
         cname=$(echo "$container" | jq -r '.name // empty')
-        cpu=$(echo "$container" | jq -r '.resources.requests.cpu // empty')
-        memory=$(echo "$container" | jq -r '.resources.requests.memory // empty')
+        req_cpu=$(echo "$container" | jq -r '.resources.requests.cpu // empty')
+        req_mem=$(echo "$container" | jq -r '.resources.requests.memory // empty')
+        lim_cpu=$(echo "$container" | jq -r '.resources.limits.cpu // empty')
+        lim_mem=$(echo "$container" | jq -r '.resources.limits.memory // empty')
 
-        if [ -z "$cname" ] || [ -z "$cpu" ] || [ -z "$memory" ]; then
-          echo "Skipping $file container (missing fields)"
+        if [ -z "$cname" ]; then
+          log "Skipping $file container (missing name)"
           continue
         fi
 
-        if echo "$live" | jq -e --arg name "$cname" '.spec.template.spec.containers[]? | select(.name==$name)' >/dev/null; then
-          patch=$(jq -n --arg name "$cname" --arg cpu "$cpu" --arg memory "$memory" '{spec:{template:{spec:{containers:[{name:$name,resources:{requests:{cpu:$cpu,memory:$memory}}}]}}}}')
-          if ! kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$patch"; then
-            echo "Failed to patch $kind/$namespace/$name container $cname (requests: cpu=$cpu memory=$memory)"
-          fi
-        else
-          echo "Skipping $file container $cname (not found)"
+        if [ -z "$req_cpu" ] && [ -z "$req_mem" ] && [ -z "$lim_cpu" ] && [ -z "$lim_mem" ]; then
+          log "Skipping $file container $cname (no resource values)"
+          continue
         fi
-      done
+
+        live_container=$(echo "$live" | jq -c --arg name "$cname" '.spec.template.spec.containers[]? | select(.name==$name)' 2>/dev/null || true)
+        if [ -z "$live_container" ]; then
+          log "Skipping $file container $cname (not found)"
+          continue
+        fi
+
+        live_req_cpu=$(echo "$live_container" | jq -r '.resources.requests.cpu // empty')
+        live_req_mem=$(echo "$live_container" | jq -r '.resources.requests.memory // empty')
+        live_lim_cpu=$(echo "$live_container" | jq -r '.resources.limits.cpu // empty')
+        live_lim_mem=$(echo "$live_container" | jq -r '.resources.limits.memory // empty')
+
+        changed=0
+        if [ -n "$req_cpu" ] && [ "$req_cpu" != "$live_req_cpu" ]; then changed=1; fi
+        if [ -n "$req_mem" ] && [ "$req_mem" != "$live_req_mem" ]; then changed=1; fi
+        if [ -n "$lim_cpu" ] && [ "$lim_cpu" != "$live_lim_cpu" ]; then changed=1; fi
+        if [ -n "$lim_mem" ] && [ "$lim_mem" != "$live_lim_mem" ]; then changed=1; fi
+
+        if [ "$changed" -eq 0 ]; then
+          log "No change for $kind/$namespace/$name container $cname"
+          continue
+        fi
+
+        patch=$(jq -n --arg name "$cname" \
+          --arg req_cpu "$req_cpu" --arg req_mem "$req_mem" \
+          --arg lim_cpu "$lim_cpu" --arg lim_mem "$lim_mem" '
+          {spec:{template:{spec:{containers:[{name:$name,resources:{}}]}}}}
+          | if $req_cpu != "" or $req_mem != "" then
+              .spec.template.spec.containers[0].resources.requests = {}
+            else . end
+          | if $req_cpu != "" then .spec.template.spec.containers[0].resources.requests.cpu = $req_cpu else . end
+          | if $req_mem != "" then .spec.template.spec.containers[0].resources.requests.memory = $req_mem else . end
+          | if $lim_cpu != "" or $lim_mem != "" then
+              .spec.template.spec.containers[0].resources.limits = {}
+            else . end
+          | if $lim_cpu != "" then .spec.template.spec.containers[0].resources.limits.cpu = $lim_cpu else . end
+          | if $lim_mem != "" then .spec.template.spec.containers[0].resources.limits.memory = $lim_mem else . end
+        ')
+
+        if kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$patch" >/dev/null 2>&1; then
+          log "Patched $kind/$namespace/$name container $cname"
+          restart_needed=1
+        else
+          log "Failed to patch $kind/$namespace/$name container $cname (non-fatal)"
+        fi
+      done < "$tmp_containers"
+
+      rm -f "$tmp_containers"
+
+      if [ "$restart_needed" -eq 1 ]; then
+        kind_lc=$(echo "$kind" | tr '[:upper:]' '[:lower:]')
+        if kubectl rollout restart "$kind_lc/$name" -n "$namespace" >/dev/null 2>&1; then
+          log "Restarted $kind/$namespace/$name"
+        else
+          log "Rollout restart failed for $kind/$namespace/$name (non-fatal)"
+        fi
+      fi
     done
 ---
 apiVersion: batch/v1
