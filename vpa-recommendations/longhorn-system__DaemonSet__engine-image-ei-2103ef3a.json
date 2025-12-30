@@ -13,7 +13,7 @@
             "name": "engine-image-ei-2103ef3a",
             "resources": {
               "requests": {
-                "cpu": "49m",
+                "cpu": "35m",
                 "memory": "250Mi"
               }
             }

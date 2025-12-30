@@ -31,7 +31,7 @@
             "name": "ollama",
             "resources": {
               "requests": {
-                "cpu": "78m",
+                "cpu": "93m",
                 "memory": "1312092764"
               }
             }
