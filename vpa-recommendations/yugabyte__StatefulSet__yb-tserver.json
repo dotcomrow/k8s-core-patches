@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "StatefulSet",
+  "metadata": {
+    "name": "yb-tserver",
+    "namespace": "yugabyte"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "yb-tserver",
+            "resources": {
+              "requests": {
+                "cpu": "1836m",
+                "memory": "2677845899"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

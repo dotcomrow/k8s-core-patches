@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "open-webui",
+    "namespace": "ollama"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "open-webui",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "1038683533"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "bootstrap-watcher",
+    "namespace": "kafka"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "table-sync",
+            "resources": {
+              "requests": {
+                "cpu": "35m",
+                "memory": "1038683533"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

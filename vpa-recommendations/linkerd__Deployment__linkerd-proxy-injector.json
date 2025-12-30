@@ -1,0 +1,34 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "linkerd-proxy-injector",
+    "namespace": "linkerd"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              }
+            }
+          },
+          {
+            "name": "proxy-injector",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

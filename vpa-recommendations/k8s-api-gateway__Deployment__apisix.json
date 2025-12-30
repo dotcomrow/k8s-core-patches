@@ -1,0 +1,43 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "apisix",
+    "namespace": "k8s-api-gateway"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "apisix",
+            "resources": {
+              "requests": {
+                "cpu": "49m",
+                "memory": "548861636"
+              }
+            }
+          },
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          },
+          {
+            "name": "vault-agent",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

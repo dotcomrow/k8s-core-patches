@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "argocd-repo-server",
+    "namespace": "argocd"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "repo-server",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "250Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

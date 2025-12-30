@@ -1,0 +1,52 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "keycloak",
+    "namespace": "keycloak"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "keycloak",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "1038683533"
+              }
+            }
+          },
+          {
+            "name": "keycloak-configurator",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "vault-agent",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "StatefulSet",
+  "metadata": {
+    "name": "openobserve-ingester",
+    "namespace": "openobserve"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "openobserve-ingester",
+            "resources": {
+              "requests": {
+                "cpu": "1836m",
+                "memory": "2677845899"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "tap",
+    "namespace": "linkerd-viz"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              }
+            }
+          },
+          {
+            "name": "tap",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

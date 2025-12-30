@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "oo-auth-bridge",
+    "namespace": "openobserve"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "bridge",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "250Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

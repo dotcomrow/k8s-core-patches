@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "kafka-ui",
+    "namespace": "kafka"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "ui",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "272061154"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

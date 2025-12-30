@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "kafka-connect",
+    "namespace": "kafka"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "connect",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "476450463"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

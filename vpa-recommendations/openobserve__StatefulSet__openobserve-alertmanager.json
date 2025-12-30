@@ -1,0 +1,25 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "StatefulSet",
+  "metadata": {
+    "name": "openobserve-alertmanager",
+    "namespace": "openobserve"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "openobserve-alertmanager",
+            "resources": {
+              "requests": {
+                "cpu": "35m",
+                "memory": "1312092764"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

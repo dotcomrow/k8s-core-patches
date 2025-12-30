@@ -1,0 +1,52 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "linkerd-destination",
+    "namespace": "linkerd"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "destination",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "policy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "sp-validator",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

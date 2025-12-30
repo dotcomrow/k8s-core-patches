@@ -1,0 +1,52 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "directus",
+    "namespace": "directus"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "directus",
+            "resources": {
+              "requests": {
+                "cpu": "23m",
+                "memory": "203699302"
+              }
+            }
+          },
+          {
+            "name": "directus-postschema",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "vault-agent",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
