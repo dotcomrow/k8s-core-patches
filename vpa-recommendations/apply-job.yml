@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vpa-recommendation-applier
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: vpa-recommendation-applier
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "daemonsets"]
+    verbs: ["get", "list", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: vpa-recommendation-applier
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vpa-recommendation-applier
+subjects:
+  - kind: ServiceAccount
+    name: vpa-recommendation-applier
+    namespace: goldilocks
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vpa-recommendation-applier
+  namespace: goldilocks
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  apply.sh: |
+    #!/bin/sh
+    set -eu
+
+    : "${REPO_URL:?}"
+    : "${REPO_BRANCH:?}"
+    : "${TARGET_DIR:?}"
+    : "${GIT_USERNAME:?}"
+    : "${GIT_TOKEN:?}"
+
+    apk add --no-cache git ca-certificates >/dev/null
+
+    WORKDIR="$(mktemp -d)"
+    trap 'rm -rf "$WORKDIR"' EXIT
+
+    AUTH_URL="https://${GIT_USERNAME}:${GIT_TOKEN}@${REPO_URL#https://}"
+    git clone --branch "${REPO_BRANCH}" "${AUTH_URL}" "${WORKDIR}/repo" >/dev/null
+
+    cd "${WORKDIR}/repo/${TARGET_DIR}"
+
+    for file in *.json; do
+      [ -e "$file" ] || continue
+      if kubectl get -f "$file" >/dev/null 2>&1; then
+        kubectl apply --server-side --field-manager=vpa-recommendation-applier -f "$file"
+      else
+        echo "Skipping $file (target not found)"
+      fi
+    done
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vpa-recommendation-apply
+  namespace: goldilocks
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: vpa-recommendation-applier
+      restartPolicy: OnFailure
+      containers:
+        - name: apply
+          image: alpine/k8s:1.31.4
+          command: ["/bin/sh", "-c"]
+          args: ["/scripts/apply.sh"]
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          env:
+            - name: REPO_URL
+              value: "https://github.com/dotcomrow/k8s-core-patches.git"
+            - name: REPO_BRANCH
+              value: "prod"
+            - name: TARGET_DIR
+              value: "vpa-recommendations"
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: vpa-recommendation-exporter-git
+                  key: username
+            - name: GIT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vpa-recommendation-exporter-git
+                  key: token
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+      volumes:
+        - name: scripts
+          configMap:
+            name: vpa-recommendation-applier
+            defaultMode: 0755
