@@ -13,8 +13,8 @@
             "name": "openobserve-router",
             "resources": {
               "requests": {
-                "cpu": "126m",
-                "memory": "1102117711"
+                "cpu": "247m",
+                "memory": "1238659775"
               }
             }
           }

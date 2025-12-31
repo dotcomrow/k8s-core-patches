@@ -13,7 +13,7 @@
             "name": "alloy",
             "resources": {
               "requests": {
-                "cpu": "587m",
+                "cpu": "3666m",
                 "memory": "144645763"
               }
             }

@@ -14,7 +14,7 @@
             "resources": {
               "requests": {
                 "cpu": "23m",
-                "memory": "297164212"
+                "memory": "587804717"
               }
             }
           },

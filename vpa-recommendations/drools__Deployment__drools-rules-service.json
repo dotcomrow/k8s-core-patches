@@ -13,7 +13,7 @@
             "name": "drools-service",
             "resources": {
               "requests": {
-                "cpu": "977m",
+                "cpu": "23m",
                 "memory": "125Mi"
               }
             }

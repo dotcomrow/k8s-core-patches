@@ -2,15 +2,15 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "kyverno-cleanup-controller",
-    "namespace": "kyverno"
+    "name": "cnpg-controller-manager",
+    "namespace": "cnpg-system"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "controller",
+            "name": "manager",
             "resources": {
               "requests": {
                 "cpu": "25m",
