@@ -122,6 +122,20 @@ data:
       ')"
       pods_ready=0
       pods_json=""
+      template_update_logged=0
+      kind_lc=$(echo "$kind" | tr '[:upper:]' '[:lower:]')
+      template_update_mode="skip-unsupported"
+      update_strategy=""
+      if [ "$kind_lc" = "statefulset" ] || [ "$kind_lc" = "daemonset" ]; then
+        update_strategy="$(echo "$live" | jq -r '.spec.updateStrategy.type // "RollingUpdate"')"
+        if [ "$update_strategy" = "OnDelete" ]; then
+          template_update_mode="ondelete"
+        else
+          template_update_mode="skip-update-strategy"
+        fi
+      elif [ "$kind_lc" = "deployment" ]; then
+        template_update_mode="skip-deployment"
+      fi
 
       tmp_containers="$(mktemp)"
       if ! jq -c '.spec.template.spec.containers[]?' "$file" > "$tmp_containers" 2>/dev/null; then
@@ -192,6 +206,22 @@ data:
           | if $lim_mem != "" then .spec.containers[0].resources.limits.memory = $lim_mem else . end
         ')
 
+        template_patch=$(jq -n --arg name "$cname" \
+          --arg req_cpu "$req_cpu" --arg req_mem "$req_mem" \
+          --arg lim_cpu "$lim_cpu" --arg lim_mem "$lim_mem" '
+          {spec:{template:{spec:{containers:[{name:$name,resources:{}}]}}}}
+          | if $req_cpu != "" or $req_mem != "" then
+              .spec.template.spec.containers[0].resources.requests = {}
+            else . end
+          | if $req_cpu != "" then .spec.template.spec.containers[0].resources.requests.cpu = $req_cpu else . end
+          | if $req_mem != "" then .spec.template.spec.containers[0].resources.requests.memory = $req_mem else . end
+          | if $lim_cpu != "" or $lim_mem != "" then
+              .spec.template.spec.containers[0].resources.limits = {}
+            else . end
+          | if $lim_cpu != "" then .spec.template.spec.containers[0].resources.limits.cpu = $lim_cpu else . end
+          | if $lim_mem != "" then .spec.template.spec.containers[0].resources.limits.memory = $lim_mem else . end
+        ')
+
         if [ "$inplace_support" != "no" ]; then
           if [ "$pods_ready" -eq 0 ]; then
             if [ -n "$pod_selector" ]; then
@@ -236,27 +266,34 @@ data:
                 log "Failed to resize pod $pod ($kind/$namespace/$name) container $cname (non-fatal)"
               fi
             done
+
+            if [ "$template_update_mode" = "ondelete" ]; then
+              if kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$template_patch" >/dev/null 2>&1; then
+                log "Patched template $kind/$namespace/$name container $cname (OnDelete)"
+              else
+                log "Failed to patch template $kind/$namespace/$name container $cname (non-fatal)"
+              fi
+            else
+              if [ "$template_update_logged" -eq 0 ]; then
+                case "$template_update_mode" in
+                  skip-deployment)
+                    log "Skipping template update for Deployment $namespace/$name (always rolls out)"
+                    ;;
+                  skip-update-strategy)
+                    log "Skipping template update for $kind/$namespace/$name (updateStrategy not OnDelete)"
+                    ;;
+                  *)
+                    log "Skipping template update for $kind/$namespace/$name (unsupported kind)"
+                    ;;
+                esac
+                template_update_logged=1
+              fi
+            fi
             continue
           fi
         fi
 
-        patch=$(jq -n --arg name "$cname" \
-          --arg req_cpu "$req_cpu" --arg req_mem "$req_mem" \
-          --arg lim_cpu "$lim_cpu" --arg lim_mem "$lim_mem" '
-          {spec:{template:{spec:{containers:[{name:$name,resources:{}}]}}}}
-          | if $req_cpu != "" or $req_mem != "" then
-              .spec.template.spec.containers[0].resources.requests = {}
-            else . end
-          | if $req_cpu != "" then .spec.template.spec.containers[0].resources.requests.cpu = $req_cpu else . end
-          | if $req_mem != "" then .spec.template.spec.containers[0].resources.requests.memory = $req_mem else . end
-          | if $lim_cpu != "" or $lim_mem != "" then
-              .spec.template.spec.containers[0].resources.limits = {}
-            else . end
-          | if $lim_cpu != "" then .spec.template.spec.containers[0].resources.limits.cpu = $lim_cpu else . end
-          | if $lim_mem != "" then .spec.template.spec.containers[0].resources.limits.memory = $lim_mem else . end
-        ')
-
-        if kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$patch" >/dev/null 2>&1; then
+        if kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$template_patch" >/dev/null 2>&1; then
           log "Patched $kind/$namespace/$name container $cname"
           restart_needed=1
         else
@@ -267,7 +304,6 @@ data:
       rm -f "$tmp_containers"
 
       if [ "$restart_needed" -eq 1 ]; then
-        kind_lc=$(echo "$kind" | tr '[:upper:]' '[:lower:]')
         if kubectl rollout restart "$kind_lc/$name" -n "$namespace" >/dev/null 2>&1; then
           log "Restarted $kind/$namespace/$name"
         else
