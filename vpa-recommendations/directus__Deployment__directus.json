@@ -13,8 +13,8 @@
             "name": "directus",
             "resources": {
               "requests": {
-                "cpu": "1469m",
-                "memory": "272061154"
+                "cpu": "49m",
+                "memory": "297164212"
               }
             }
           },

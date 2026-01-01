@@ -13,7 +13,7 @@
             "name": "bridge",
             "resources": {
               "requests": {
-                "cpu": "49m",
+                "cpu": "25m",
                 "memory": "250Mi"
               }
             }

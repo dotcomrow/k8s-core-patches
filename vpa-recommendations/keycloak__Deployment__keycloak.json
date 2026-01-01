@@ -14,7 +14,7 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
-                "memory": "2162292018"
+                "memory": "2048373350"
               }
             }
           },
@@ -23,7 +23,7 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
-                "memory": "109814751"
+                "memory": "144645763"
               }
             }
           },

@@ -13,8 +13,8 @@
             "name": "table-sync",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "813749082"
+                "cpu": "78m",
+                "memory": "1168723596"
               }
             }
           }
