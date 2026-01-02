@@ -13,7 +13,7 @@
             "name": "controller",
             "resources": {
               "requests": {
-                "cpu": "25m",
+                "cpu": "35m",
                 "memory": "250Mi"
               }
             }

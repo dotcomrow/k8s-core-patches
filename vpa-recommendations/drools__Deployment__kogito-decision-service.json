@@ -13,8 +13,8 @@
             "name": "kogito-decision-service",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "1939879381"
+                "cpu": "23m",
+                "memory": "1555165137"
               }
             }
           },

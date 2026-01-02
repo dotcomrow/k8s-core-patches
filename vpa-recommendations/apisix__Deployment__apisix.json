@@ -13,8 +13,8 @@
             "name": "apisix",
             "resources": {
               "requests": {
-                "cpu": "23m",
-                "memory": "442809964"
+                "cpu": "49m",
+                "memory": "628694953"
               }
             }
           },
@@ -22,7 +22,7 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "12m",
                 "memory": "125Mi"
               }
             }

@@ -13,7 +13,7 @@
             "name": "etcd",
             "resources": {
               "requests": {
-                "cpu": "35m",
+                "cpu": "63m",
                 "memory": "250Mi"
               }
             }

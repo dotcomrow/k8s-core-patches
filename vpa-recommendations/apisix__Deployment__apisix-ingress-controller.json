@@ -13,7 +13,7 @@
             "name": "ingress-controller",
             "resources": {
               "requests": {
-                "cpu": "12m",
+                "cpu": "23m",
                 "memory": "125Mi"
               }
             }
