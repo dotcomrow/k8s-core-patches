@@ -10,10 +10,19 @@
       "spec": {
         "containers": [
           {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              }
+            }
+          },
+          {
             "name": "open-webui",
             "resources": {
               "requests": {
-                "cpu": "25m",
+                "cpu": "12m",
                 "memory": "813749082"
               }
             }

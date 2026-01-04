@@ -2,24 +2,24 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "gravitee-gateway",
-    "namespace": "k8s-api-gateway"
+    "name": "open-webui-openapi",
+    "namespace": "ollama"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "gravitee-gateway",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "813749082"
+                "cpu": "12m",
+                "memory": "125Mi"
               }
             }
           },
           {
-            "name": "vault-agent",
+            "name": "openapi-server",
             "resources": {
               "requests": {
                 "cpu": "12m",
