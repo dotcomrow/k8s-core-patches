@@ -13,7 +13,7 @@
             "name": "destination",
             "resources": {
               "requests": {
-                "cpu": "11m",
+                "cpu": "23m",
                 "memory": "78221997"
               }
             }
