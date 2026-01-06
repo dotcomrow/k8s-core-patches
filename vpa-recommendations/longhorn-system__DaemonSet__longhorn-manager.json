@@ -13,8 +13,8 @@
             "name": "longhorn-manager",
             "resources": {
               "requests": {
-                "cpu": "78m",
-                "memory": "272061154"
+                "cpu": "93m",
+                "memory": "248153480"
               }
             }
           },

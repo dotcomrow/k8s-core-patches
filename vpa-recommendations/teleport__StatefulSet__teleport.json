@@ -13,8 +13,8 @@
             "name": "teleport",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "297164212"
+                "cpu": "49m",
+                "memory": "248153480"
               }
             }
           },

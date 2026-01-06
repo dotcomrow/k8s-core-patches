@@ -13,8 +13,8 @@
             "name": "apisix-dashboard",
             "resources": {
               "requests": {
-                "cpu": "109m",
-                "memory": "628694953"
+                "cpu": "23m",
+                "memory": "125Mi"
               }
             }
           },

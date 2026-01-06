@@ -13,8 +13,8 @@
             "name": "kogito-jobs-service",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "587804717"
+                "cpu": "23m",
+                "memory": "511772986"
               }
             }
           },

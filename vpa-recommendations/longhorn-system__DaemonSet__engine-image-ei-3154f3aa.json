@@ -2,7 +2,7 @@
   "apiVersion": "apps/v1",
   "kind": "DaemonSet",
   "metadata": {
-    "name": "engine-image-ei-2103ef3a",
+    "name": "engine-image-ei-3154f3aa",
     "namespace": "longhorn-system"
   },
   "spec": {
@@ -10,10 +10,10 @@
       "spec": {
         "containers": [
           {
-            "name": "engine-image-ei-2103ef3a",
+            "name": "engine-image-ei-3154f3aa",
             "resources": {
               "requests": {
-                "cpu": "35m",
+                "cpu": "49m",
                 "memory": "250Mi"
               }
             }

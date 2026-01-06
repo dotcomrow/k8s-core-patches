@@ -22,8 +22,8 @@
             "name": "prometheus",
             "resources": {
               "requests": {
-                "cpu": "143m",
-                "memory": "1312092764"
+                "cpu": "182m",
+                "memory": "1389197403"
               }
             }
           }

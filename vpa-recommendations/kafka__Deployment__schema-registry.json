@@ -13,8 +13,8 @@
             "name": "schema-registry",
             "resources": {
               "requests": {
-                "cpu": "25m",
-                "memory": "511772986"
+                "cpu": "35m",
+                "memory": "587804717"
               }
             }
           }
