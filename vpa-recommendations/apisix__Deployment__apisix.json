@@ -13,8 +13,8 @@
             "name": "apisix",
             "resources": {
               "requests": {
-                "cpu": "63m",
-                "memory": "548861636"
+                "cpu": "49m",
+                "memory": "628694953"
               }
             }
           },
