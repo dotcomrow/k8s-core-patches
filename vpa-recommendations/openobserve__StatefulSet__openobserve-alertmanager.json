@@ -13,7 +13,7 @@
             "name": "openobserve-alertmanager",
             "resources": {
               "requests": {
-                "cpu": "25m",
+                "cpu": "35m",
                 "memory": "1238659775"
               }
             }
