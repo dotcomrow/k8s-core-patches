@@ -2,8 +2,8 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "prometheus",
-    "namespace": "linkerd-viz"
+    "name": "kie-workbench-teleport-proxy",
+    "namespace": "drools"
   },
   "spec": {
     "template": {
@@ -13,17 +13,17 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "49m",
+                "cpu": "12m",
                 "memory": "125Mi"
               }
             }
           },
           {
-            "name": "prometheus",
+            "name": "nginx",
             "resources": {
               "requests": {
-                "cpu": "163m",
-                "memory": "1555165137"
+                "cpu": "12m",
+                "memory": "125Mi"
               }
             }
           }

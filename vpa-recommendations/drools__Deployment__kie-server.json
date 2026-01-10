@@ -19,11 +19,20 @@
             }
           },
           {
+            "name": "kie-server-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          },
+          {
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "125Mi"
+                "cpu": "11m",
+                "memory": "87381333"
               }
             }
           }
