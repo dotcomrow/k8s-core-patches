@@ -2,24 +2,24 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "kogito-jobs-service",
-    "namespace": "drools"
+    "name": "idrac6-console",
+    "namespace": "teleport"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "kogito-jobs-service",
+            "name": "idrac6",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "587804717"
+                "cpu": "63m",
+                "memory": "1038683533"
               }
             }
           },
           {
-            "name": "linkerd-proxy",
+            "name": "vault-agent",
             "resources": {
               "requests": {
                 "cpu": "12m",

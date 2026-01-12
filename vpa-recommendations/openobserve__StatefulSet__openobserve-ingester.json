@@ -13,8 +13,8 @@
             "name": "openobserve-ingester",
             "resources": {
               "requests": {
-                "cpu": "2048m",
-                "memory": "4281023392"
+                "cpu": "2162m",
+                "memory": "4506574562"
               }
             }
           }

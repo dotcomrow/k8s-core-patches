@@ -2,7 +2,7 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "kogito-jobs-service",
+    "name": "kie-workbench-oauth2-proxy",
     "namespace": "drools"
   },
   "spec": {
@@ -10,16 +10,16 @@
       "spec": {
         "containers": [
           {
-            "name": "kogito-jobs-service",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
                 "cpu": "12m",
-                "memory": "587804717"
+                "memory": "125Mi"
               }
             }
           },
           {
-            "name": "linkerd-proxy",
+            "name": "oauth2-proxy",
             "resources": {
               "requests": {
                 "cpu": "12m",
