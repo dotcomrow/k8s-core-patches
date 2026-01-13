@@ -13,8 +13,8 @@
             "name": "keycloak",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "3861631195"
+                "cpu": "23m",
+                "memory": "12965919539"
               }
             }
           },

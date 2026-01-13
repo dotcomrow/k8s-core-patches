@@ -10,6 +10,15 @@
       "spec": {
         "containers": [
           {
+            "name": "curl",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
             "name": "gravitee-gateway",
             "resources": {
               "requests": {
@@ -19,11 +28,20 @@
             }
           },
           {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "23m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
             "name": "vault-agent",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "125Mi"
+                "cpu": "11m",
+                "memory": "64000Ki"
               }
             }
           }
