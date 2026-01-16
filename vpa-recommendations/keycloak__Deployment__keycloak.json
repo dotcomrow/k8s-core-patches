@@ -13,8 +13,8 @@
             "name": "keycloak",
             "resources": {
               "requests": {
-                "cpu": "23m",
-                "memory": "12337542418"
+                "cpu": "35m",
+                "memory": "1939879381"
               }
             }
           },
@@ -22,7 +22,7 @@
             "name": "keycloak-configurator",
             "resources": {
               "requests": {
-                "cpu": "11m",
+                "cpu": "2048m",
                 "memory": "163378051"
               }
             }
@@ -40,7 +40,7 @@
             "name": "vault-agent",
             "resources": {
               "requests": {
-                "cpu": "11m",
+                "cpu": "23m",
                 "memory": "64000Ki"
               }
             }

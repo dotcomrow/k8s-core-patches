@@ -13,8 +13,17 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "125Mi"
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          },
+          {
+            "name": "openapi-fetcher",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
               }
             }
           },
@@ -22,8 +31,8 @@
             "name": "openapi-server",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "125Mi"
+                "cpu": "11m",
+                "memory": "87381333"
               }
             }
           }

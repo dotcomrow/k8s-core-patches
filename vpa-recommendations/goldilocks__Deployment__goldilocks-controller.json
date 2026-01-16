@@ -13,7 +13,7 @@
             "name": "goldilocks",
             "resources": {
               "requests": {
-                "cpu": "442m",
+                "cpu": "548m",
                 "memory": "250Mi"
               }
             }

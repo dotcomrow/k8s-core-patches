@@ -13,8 +13,8 @@
             "name": "connect",
             "resources": {
               "requests": {
-                "cpu": "25m",
-                "memory": "978270031"
+                "cpu": "35m",
+                "memory": "764046746"
               }
             }
           }

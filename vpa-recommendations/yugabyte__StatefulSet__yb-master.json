@@ -13,8 +13,8 @@
             "name": "yb-master",
             "resources": {
               "requests": {
-                "cpu": "143m",
-                "memory": "351198544"
+                "cpu": "163m",
+                "memory": "323522422"
               }
             }
           }

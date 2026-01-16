@@ -13,7 +13,7 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "35m",
                 "memory": "125Mi"
               }
             }
@@ -22,7 +22,7 @@
             "name": "otel-collector",
             "resources": {
               "requests": {
-                "cpu": "63m",
+                "cpu": "93m",
                 "memory": "323522422"
               }
             }

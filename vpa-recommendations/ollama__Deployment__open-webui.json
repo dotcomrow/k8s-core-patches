@@ -22,8 +22,8 @@
             "name": "open-webui",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "813749082"
+                "cpu": "49m",
+                "memory": "1168723596"
               }
             }
           }
