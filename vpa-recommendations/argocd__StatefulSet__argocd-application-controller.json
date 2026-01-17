@@ -13,8 +13,8 @@
             "name": "application-controller",
             "resources": {
               "requests": {
-                "cpu": "1038m",
-                "memory": "813749082"
+                "cpu": "548m",
+                "memory": "920733364"
               }
             }
           }

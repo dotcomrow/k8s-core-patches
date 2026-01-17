@@ -13,7 +13,7 @@
             "name": "ingress-controller",
             "resources": {
               "requests": {
-                "cpu": "35m",
+                "cpu": "23m",
                 "memory": "125Mi"
               }
             }
@@ -22,7 +22,7 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "12m",
                 "memory": "125Mi"
               }
             }

@@ -13,8 +13,8 @@
             "name": "kie-workbench",
             "resources": {
               "requests": {
-                "cpu": "63m",
-                "memory": "1836551791"
+                "cpu": "49m",
+                "memory": "1939879381"
               }
             }
           },

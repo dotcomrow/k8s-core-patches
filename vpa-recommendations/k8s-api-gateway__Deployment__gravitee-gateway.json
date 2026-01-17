@@ -13,7 +13,7 @@
             "name": "gravitee-gateway",
             "resources": {
               "requests": {
-                "cpu": "93m",
+                "cpu": "49m",
                 "memory": "865936536"
               }
             }

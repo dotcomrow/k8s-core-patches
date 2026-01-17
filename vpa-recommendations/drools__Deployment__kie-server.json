@@ -13,7 +13,7 @@
             "name": "kie-server",
             "resources": {
               "requests": {
-                "cpu": "49m",
+                "cpu": "35m",
                 "memory": "1168723596"
               }
             }

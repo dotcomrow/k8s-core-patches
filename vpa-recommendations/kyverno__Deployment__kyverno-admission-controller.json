@@ -13,7 +13,7 @@
             "name": "kyverno",
             "resources": {
               "requests": {
-                "cpu": "78m",
+                "cpu": "49m",
                 "memory": "250Mi"
               }
             }

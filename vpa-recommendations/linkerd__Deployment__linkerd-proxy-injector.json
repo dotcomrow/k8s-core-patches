@@ -22,7 +22,7 @@
             "name": "proxy-injector",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "12m",
                 "memory": "125Mi"
               }
             }
