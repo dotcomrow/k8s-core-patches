@@ -1,28 +1,28 @@
 {
   "apiVersion": "apps/v1",
-  "kind": "StatefulSet",
+  "kind": "Deployment",
   "metadata": {
-    "name": "teleport",
-    "namespace": "teleport"
+    "name": "kogito-task-console",
+    "namespace": "drools"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "teleport",
+            "name": "kogito-task-console",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "323522422"
+                "cpu": "12m",
+                "memory": "163378051"
               }
             }
           },
           {
-            "name": "teleport-guard",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "12m",
                 "memory": "125Mi"
               }
             }
