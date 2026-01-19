@@ -13,8 +13,8 @@
             "name": "minio",
             "resources": {
               "requests": {
-                "cpu": "296m",
-                "memory": "2975900105"
+                "cpu": "410m",
+                "memory": "3481230109"
               }
             }
           }

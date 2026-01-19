@@ -2,24 +2,24 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "idrac6-console",
-    "namespace": "teleport"
+    "name": "kogito-task-console-proxy",
+    "namespace": "drools"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "idrac6",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "63m",
-                "memory": "5253177127"
+                "cpu": "12m",
+                "memory": "125Mi"
               }
             }
           },
           {
-            "name": "vault-agent",
+            "name": "nginx",
             "resources": {
               "requests": {
                 "cpu": "12m",

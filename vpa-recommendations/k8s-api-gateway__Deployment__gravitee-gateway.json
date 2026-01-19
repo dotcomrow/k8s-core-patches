@@ -22,7 +22,7 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "11m",
                 "memory": "87381333"
               }
             }
