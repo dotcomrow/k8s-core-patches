@@ -2,7 +2,7 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "kie-server",
+    "name": "kie-server-openapi",
     "namespace": "drools"
   },
   "spec": {
@@ -10,16 +10,7 @@
       "spec": {
         "containers": [
           {
-            "name": "kie-server",
-            "resources": {
-              "requests": {
-                "cpu": "35m",
-                "memory": "1168723596"
-              }
-            }
-          },
-          {
-            "name": "kie-server-proxy",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
                 "cpu": "11m",
@@ -28,7 +19,16 @@
             }
           },
           {
-            "name": "linkerd-proxy",
+            "name": "openapi-fetcher",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          },
+          {
+            "name": "openapi-server",
             "resources": {
               "requests": {
                 "cpu": "11m",
