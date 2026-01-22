@@ -22,8 +22,8 @@
             "name": "opensearch",
             "resources": {
               "requests": {
-                "cpu": "182m",
-                "memory": "5527335984"
+                "cpu": "203m",
+                "memory": "6434836068"
               }
             }
           }
