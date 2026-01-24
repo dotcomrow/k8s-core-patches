@@ -13,7 +13,7 @@
             "name": "application-controller",
             "resources": {
               "requests": {
-                "cpu": "587m",
+                "cpu": "627m",
                 "memory": "978270031"
               }
             }

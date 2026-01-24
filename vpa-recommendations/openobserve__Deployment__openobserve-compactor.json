@@ -13,7 +13,7 @@
             "name": "openobserve-compactor",
             "resources": {
               "requests": {
-                "cpu": "109m",
+                "cpu": "93m",
                 "memory": "10626315661"
               }
             }
