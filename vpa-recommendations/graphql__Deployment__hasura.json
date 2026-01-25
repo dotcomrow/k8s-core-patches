@@ -2,28 +2,19 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "directus",
-    "namespace": "directus"
+    "name": "hasura",
+    "namespace": "graphql"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "directus",
+            "name": "hasura",
             "resources": {
               "requests": {
                 "cpu": "23m",
-                "memory": "248153480"
-              }
-            }
-          },
-          {
-            "name": "directus-postschema",
-            "resources": {
-              "requests": {
-                "cpu": "11m",
-                "memory": "64000Ki"
+                "memory": "297164212"
               }
             }
           },
@@ -32,7 +23,7 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
-                "memory": "64000Ki"
+                "memory": "87381333"
               }
             }
           },
@@ -41,7 +32,7 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
-                "memory": "64000Ki"
+                "memory": "87381333"
               }
             }
           }

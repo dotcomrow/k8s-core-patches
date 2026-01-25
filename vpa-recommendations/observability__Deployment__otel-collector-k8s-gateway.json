@@ -22,8 +22,8 @@
             "name": "otel-collector",
             "resources": {
               "requests": {
-                "cpu": "49m",
-                "memory": "476450463"
+                "cpu": "63m",
+                "memory": "511772986"
               }
             }
           }

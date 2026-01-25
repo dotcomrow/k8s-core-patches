@@ -2,24 +2,15 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "directus",
-    "namespace": "directus"
+    "name": "hasura-console-proxy",
+    "namespace": "graphql"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "directus",
-            "resources": {
-              "requests": {
-                "cpu": "23m",
-                "memory": "248153480"
-              }
-            }
-          },
-          {
-            "name": "directus-postschema",
+            "name": "hasura-console-upstream",
             "resources": {
               "requests": {
                 "cpu": "11m",
@@ -29,6 +20,15 @@
           },
           {
             "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
+              }
+            }
+          },
+          {
+            "name": "oauth2-proxy",
             "resources": {
               "requests": {
                 "cpu": "11m",

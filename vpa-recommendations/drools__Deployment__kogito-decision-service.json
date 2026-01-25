@@ -10,15 +10,6 @@
       "spec": {
         "containers": [
           {
-            "name": "decision-service-proxy",
-            "resources": {
-              "requests": {
-                "cpu": "11m",
-                "memory": "87381333"
-              }
-            }
-          },
-          {
             "name": "kogito-decision-service",
             "resources": {
               "requests": {
@@ -31,8 +22,8 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "11m",
-                "memory": "87381333"
+                "cpu": "12m",
+                "memory": "125Mi"
               }
             }
           }
