@@ -2,24 +2,24 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "apisix",
-    "namespace": "k8s-api-gateway"
+    "name": "graphql-gravitee-sync",
+    "namespace": "graphql"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "apisix",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "671629701"
+                "cpu": "11m",
+                "memory": "87381333"
               }
             }
           },
           {
-            "name": "linkerd-proxy",
+            "name": "sync",
             "resources": {
               "requests": {
                 "cpu": "11m",
