@@ -13,8 +13,8 @@
             "name": "openobserve-querier",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "1389197403"
+                "cpu": "25m",
+                "memory": "1168723596"
               }
             }
           }

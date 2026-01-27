@@ -13,8 +13,8 @@
             "name": "hasura",
             "resources": {
               "requests": {
-                "cpu": "23m",
-                "memory": "380258472"
+                "cpu": "35m",
+                "memory": "410771395"
               }
             }
           },
