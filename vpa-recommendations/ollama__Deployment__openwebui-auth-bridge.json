@@ -2,28 +2,28 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "idrac6-console",
-    "namespace": "teleport"
+    "name": "openwebui-auth-bridge",
+    "namespace": "ollama"
   },
   "spec": {
     "template": {
       "spec": {
         "containers": [
           {
-            "name": "idrac6",
-            "resources": {
-              "requests": {
-                "cpu": "63m",
-                "memory": "1038683533"
-              }
-            }
-          },
-          {
-            "name": "vault-agent",
+            "name": "linkerd-proxy",
             "resources": {
               "requests": {
                 "cpu": "12m",
                 "memory": "125Mi"
+              }
+            }
+          },
+          {
+            "name": "openwebui-auth-bridge",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "144645763"
               }
             }
           }
