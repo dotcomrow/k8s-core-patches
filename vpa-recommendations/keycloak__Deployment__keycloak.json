@@ -22,7 +22,7 @@
             "name": "keycloak-configurator",
             "resources": {
               "requests": {
-                "cpu": "2406m",
+                "cpu": "2048m",
                 "memory": "183046954"
               }
             }
