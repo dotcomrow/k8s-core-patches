@@ -22,7 +22,7 @@
             "name": "sentinel",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "35m",
                 "memory": "87381333"
               }
             }

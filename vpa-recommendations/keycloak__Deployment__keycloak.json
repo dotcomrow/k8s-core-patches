@@ -13,8 +13,8 @@
             "name": "keycloak",
             "resources": {
               "requests": {
-                "cpu": "163m",
-                "memory": "6117462922"
+                "cpu": "143m",
+                "memory": "3136195110"
               }
             }
           },
@@ -22,7 +22,7 @@
             "name": "keycloak-configurator",
             "resources": {
               "requests": {
-                "cpu": "2048m",
+                "cpu": "1836m",
                 "memory": "183046954"
               }
             }
@@ -31,7 +31,7 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "11m",
+                "cpu": "23m",
                 "memory": "64000Ki"
               }
             }
