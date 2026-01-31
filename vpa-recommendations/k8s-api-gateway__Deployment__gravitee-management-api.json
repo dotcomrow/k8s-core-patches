@@ -13,8 +13,8 @@
             "name": "gravitee-management-api",
             "resources": {
               "requests": {
-                "cpu": "163m",
-                "memory": "1102117711"
+                "cpu": "182m",
+                "memory": "1168723596"
               }
             }
           },

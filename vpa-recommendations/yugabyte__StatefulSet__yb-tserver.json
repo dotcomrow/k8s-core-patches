@@ -13,8 +13,8 @@
             "name": "yb-tserver",
             "resources": {
               "requests": {
-                "cpu": "813m",
-                "memory": "7117981766"
+                "cpu": "864m",
+                "memory": "7485380854"
               }
             }
           }

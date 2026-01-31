@@ -13,8 +13,17 @@
             "name": "gravitee-gateway",
             "resources": {
               "requests": {
-                "cpu": "35m",
-                "memory": "865936536"
+                "cpu": "49m",
+                "memory": "813749082"
+              }
+            }
+          },
+          {
+            "name": "gravitee-reporter-tail",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "64000Ki"
               }
             }
           },
@@ -23,7 +32,7 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
-                "memory": "87381333"
+                "memory": "64000Ki"
               }
             }
           },
@@ -32,7 +41,7 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
-                "memory": "87381333"
+                "memory": "64000Ki"
               }
             }
           }
