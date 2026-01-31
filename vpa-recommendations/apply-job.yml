@@ -122,20 +122,7 @@ data:
       ')"
       pods_ready=0
       pods_json=""
-      template_update_logged=0
       kind_lc=$(echo "$kind" | tr '[:upper:]' '[:lower:]')
-      template_update_mode="skip-unsupported"
-      update_strategy=""
-      if [ "$kind_lc" = "statefulset" ] || [ "$kind_lc" = "daemonset" ]; then
-        update_strategy="$(echo "$live" | jq -r '.spec.updateStrategy.type // "RollingUpdate"')"
-        if [ "$update_strategy" = "OnDelete" ]; then
-          template_update_mode="ondelete"
-        else
-          template_update_mode="skip-update-strategy"
-        fi
-      elif [ "$kind_lc" = "deployment" ]; then
-        template_update_mode="skip-deployment"
-      fi
 
       tmp_containers="$(mktemp)"
       if ! jq -c '.spec.template.spec.containers[]?' "$file" > "$tmp_containers" 2>/dev/null; then
@@ -148,8 +135,6 @@ data:
         rm -f "$tmp_containers"
         continue
       fi
-
-      restart_needed=0
 
       while IFS= read -r container; do
         cname=$(echo "$container" | jq -r '.name // empty')
@@ -236,80 +221,41 @@ data:
             fi
           fi
 
-          if [ "$pods_ready" -eq 1 ]; then
-            target_pods="$(echo "$pods_json" | jq -r --arg name "$cname" '.items[] | select(.spec.containers[]?.name==$name) | .metadata.name')"
-          else
-            target_pods=""
-          fi
-
-          if [ "$inplace_support" = "unknown" ] && [ "$pods_ready" -eq 1 ] && [ -n "$target_pods" ]; then
-            test_pod="$(printf '%s\n' "$target_pods" | head -n 1)"
-            if kubectl patch pod "$test_pod" -n "$namespace" --subresource=resize --type strategic --dry-run=server -p "$pod_patch" >/dev/null 2>&1; then
+          if [ "$inplace_support" = "unknown" ] && [ "$pods_ready" -eq 1 ] && [ -n "${pods_json:-}" ]; then
+            test_pod="$(echo "$pods_json" | jq -r '.items[0].metadata.name' 2>/dev/null || true)"
+            if [ -n "$test_pod" ] && kubectl patch pod "$test_pod" -n "$namespace" --subresource=resize --type strategic --dry-run=server -p "$pod_patch" >/dev/null 2>&1; then
               inplace_support="yes"
               log "Detected in-place pod resize support"
             else
               inplace_support="no"
-              log "In-place pod resize not supported; using rollout restarts"
+              log "In-place pod resize not supported; using template updates"
             fi
           fi
 
           if [ "$inplace_support" = "yes" ] && [ "$pods_ready" -eq 1 ]; then
+            target_pods="$(echo "$pods_json" | jq -r --arg name "$cname" '.items[] | select(.spec.containers[]?.name==$name) | .metadata.name')"
             if [ -z "$target_pods" ]; then
               log "No pods found for $kind/$namespace/$name container $cname"
-              continue
-            fi
-
-            for pod in $target_pods; do
-              if kubectl patch pod "$pod" -n "$namespace" --subresource=resize --type strategic -p "$pod_patch" >/dev/null 2>&1; then
-                log "Resized pod $pod ($kind/$namespace/$name) container $cname"
-              else
-                log "Failed to resize pod $pod ($kind/$namespace/$name) container $cname (non-fatal)"
-              fi
-            done
-
-            if [ "$template_update_mode" = "ondelete" ]; then
-              if kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$template_patch" >/dev/null 2>&1; then
-                log "Patched template $kind/$namespace/$name container $cname (OnDelete)"
-              else
-                log "Failed to patch template $kind/$namespace/$name container $cname (non-fatal)"
-              fi
             else
-              if [ "$template_update_logged" -eq 0 ]; then
-                case "$template_update_mode" in
-                  skip-deployment)
-                    log "Skipping template update for Deployment $namespace/$name (always rolls out)"
-                    ;;
-                  skip-update-strategy)
-                    log "Skipping template update for $kind/$namespace/$name (updateStrategy not OnDelete)"
-                    ;;
-                  *)
-                    log "Skipping template update for $kind/$namespace/$name (unsupported kind)"
-                    ;;
-                esac
-                template_update_logged=1
-              fi
+              for pod in $target_pods; do
+                if kubectl patch pod "$pod" -n "$namespace" --subresource=resize --type strategic -p "$pod_patch" >/dev/null 2>&1; then
+                  log "Resized pod $pod ($kind/$namespace/$name) container $cname"
+                else
+                  log "Failed to resize pod $pod ($kind/$namespace/$name) container $cname (non-fatal)"
+                fi
+              done
             fi
-            continue
           fi
         fi
 
         if kubectl patch "$kind" -n "$namespace" "$name" --type strategic --field-manager=vpa-recommendation-applier -p "$template_patch" >/dev/null 2>&1; then
-          log "Patched $kind/$namespace/$name container $cname"
-          restart_needed=1
+          log "Patched template $kind/$namespace/$name container $cname"
         else
-          log "Failed to patch $kind/$namespace/$name container $cname (non-fatal)"
+          log "Failed to patch template $kind/$namespace/$name container $cname (non-fatal)"
         fi
       done < "$tmp_containers"
 
       rm -f "$tmp_containers"
-
-      if [ "$restart_needed" -eq 1 ]; then
-        if kubectl rollout restart "$kind_lc/$name" -n "$namespace" >/dev/null 2>&1; then
-          log "Restarted $kind/$namespace/$name"
-        else
-          log "Rollout restart failed for $kind/$namespace/$name (non-fatal)"
-        fi
-      fi
     done
 ---
 apiVersion: batch/v1
@@ -366,3 +312,59 @@ spec:
           configMap:
             name: vpa-recommendation-applier
             defaultMode: 0755
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vpa-recommendation-apply
+  namespace: goldilocks
+spec:
+  schedule: "25 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 300
+      template:
+        spec:
+          serviceAccountName: vpa-recommendation-applier
+          restartPolicy: OnFailure
+          containers:
+            - name: apply
+              image: alpine/k8s:1.35.0
+              command: ["/bin/sh", "-c"]
+              args: ["/scripts/apply.sh"]
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "512Mi"
+              env:
+                - name: REPO_URL
+                  value: "https://github.com/dotcomrow/k8s-core-patches.git"
+                - name: REPO_BRANCH
+                  value: "prod"
+                - name: TARGET_DIR
+                  value: "vpa-recommendations"
+                - name: GIT_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: vpa-recommendation-exporter-git
+                      key: username
+                - name: GIT_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: vpa-recommendation-exporter-git
+                      key: token
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
+          volumes:
+            - name: scripts
+              configMap:
+                name: vpa-recommendation-applier
+                defaultMode: 0755
