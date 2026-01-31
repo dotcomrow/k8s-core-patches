@@ -319,7 +319,7 @@ metadata:
   name: vpa-recommendation-apply
   namespace: goldilocks
 spec:
-  schedule: "25 * * * *"
+  schedule: "25 3 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
