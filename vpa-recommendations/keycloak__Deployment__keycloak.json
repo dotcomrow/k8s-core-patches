@@ -13,8 +13,12 @@
             "name": "keycloak",
             "resources": {
               "requests": {
-                "cpu": "109m",
-                "memory": "2975900105"
+                "cpu": "78m",
+                "memory": "2677845899"
+              },
+              "limits": {
+                "cpu": "141m",
+                "memory": "6185844856"
               }
             }
           },
@@ -24,6 +28,10 @@
               "requests": {
                 "cpu": "11m",
                 "memory": "183046954"
+              },
+              "limits": {
+                "cpu": "25m",
+                "memory": "204854574"
               }
             }
           },
@@ -31,7 +39,11 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
-                "cpu": "23m",
+                "cpu": "11m",
+                "memory": "64000Ki"
+              },
+              "limits": {
+                "cpu": "25m",
                 "memory": "64000Ki"
               }
             }
@@ -41,6 +53,10 @@
             "resources": {
               "requests": {
                 "cpu": "23m",
+                "memory": "64000Ki"
+              },
+              "limits": {
+                "cpu": "25m",
                 "memory": "64000Ki"
               }
             }

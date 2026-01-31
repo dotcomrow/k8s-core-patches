@@ -15,6 +15,10 @@
               "requests": {
                 "cpu": "11m",
                 "memory": "87381333"
+              },
+              "limits": {
+                "cpu": "11m",
+                "memory": "87381333"
               }
             }
           },
@@ -24,6 +28,10 @@
               "requests": {
                 "cpu": "11m",
                 "memory": "87381333"
+              },
+              "limits": {
+                "cpu": "11m",
+                "memory": "87381333"
               }
             }
           },
@@ -31,6 +39,10 @@
             "name": "node-driver-registrar",
             "resources": {
               "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              },
+              "limits": {
                 "cpu": "11m",
                 "memory": "87381333"
               }

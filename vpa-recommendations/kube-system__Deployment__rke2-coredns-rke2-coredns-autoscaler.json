@@ -1,0 +1,29 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "rke2-coredns-rke2-coredns-autoscaler",
+    "namespace": "kube-system"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "autoscaler",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "250Mi"
+              },
+              "limits": {
+                "cpu": "25m",
+                "memory": "250Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

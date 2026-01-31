@@ -15,6 +15,10 @@
               "requests": {
                 "cpu": "35m",
                 "memory": "125Mi"
+              },
+              "limits": {
+                "cpu": "37m",
+                "memory": "125Mi"
               }
             }
           },
@@ -22,6 +26,10 @@
             "name": "reloader",
             "resources": {
               "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              },
+              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }

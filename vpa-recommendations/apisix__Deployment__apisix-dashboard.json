@@ -13,7 +13,11 @@
             "name": "apisix-dashboard",
             "resources": {
               "requests": {
-                "cpu": "78m",
+                "cpu": "93m",
+                "memory": "125Mi"
+              },
+              "limits": {
+                "cpu": "104m",
                 "memory": "125Mi"
               }
             }
@@ -22,6 +26,10 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              },
+              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }

@@ -1,0 +1,29 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "cert-manager",
+    "namespace": "cert-manager"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "cert-manager-controller",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "250Mi"
+              },
+              "limits": {
+                "cpu": "25m",
+                "memory": "250Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -15,6 +15,10 @@
               "requests": {
                 "cpu": "182m",
                 "memory": "1168723596"
+              },
+              "limits": {
+                "cpu": "227m",
+                "memory": "1307949438"
               }
             }
           },
@@ -22,6 +26,10 @@
             "name": "vault-agent",
             "resources": {
               "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              },
+              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }

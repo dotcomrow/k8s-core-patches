@@ -15,6 +15,10 @@
               "requests": {
                 "cpu": "23m",
                 "memory": "109814751"
+              },
+              "limits": {
+                "cpu": "25m",
+                "memory": "122906334"
               }
             }
           },
@@ -23,6 +27,10 @@
             "resources": {
               "requests": {
                 "cpu": "23m",
+                "memory": "64000Ki"
+              },
+              "limits": {
+                "cpu": "39m",
                 "memory": "64000Ki"
               }
             }
@@ -33,6 +41,10 @@
               "requests": {
                 "cpu": "11m",
                 "memory": "64000Ki"
+              },
+              "limits": {
+                "cpu": "12m",
+                "memory": "64000Ki"
               }
             }
           },
@@ -41,6 +53,10 @@
             "resources": {
               "requests": {
                 "cpu": "11m",
+                "memory": "64000Ki"
+              },
+              "limits": {
+                "cpu": "12m",
                 "memory": "64000Ki"
               }
             }

@@ -1,0 +1,29 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "vpa-admission-controller",
+    "namespace": "kube-system"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "admission-controller",
+            "resources": {
+              "requests": {
+                "cpu": "49m",
+                "memory": "250Mi"
+              },
+              "limits": {
+                "cpu": "67m",
+                "memory": "250Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

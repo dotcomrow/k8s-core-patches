@@ -1,0 +1,29 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "rke2-coredns-rke2-coredns",
+    "namespace": "kube-system"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "coredns",
+            "resources": {
+              "requests": {
+                "cpu": "49m",
+                "memory": "250Mi"
+              },
+              "limits": {
+                "cpu": "52m",
+                "memory": "250Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

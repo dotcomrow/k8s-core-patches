@@ -1,0 +1,55 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "fleet-controller",
+    "namespace": "cattle-fleet-system"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "fleet-agentmanagement",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              },
+              "limits": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          },
+          {
+            "name": "fleet-cleanup",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              },
+              "limits": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          },
+          {
+            "name": "fleet-controller",
+            "resources": {
+              "requests": {
+                "cpu": "11m",
+                "memory": "87381333"
+              },
+              "limits": {
+                "cpu": "11m",
+                "memory": "87381333"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

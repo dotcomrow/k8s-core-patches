@@ -15,6 +15,10 @@
               "requests": {
                 "cpu": "23m",
                 "memory": "1238659775"
+              },
+              "limits": {
+                "cpu": "39m",
+                "memory": "1391634069"
               }
             }
           },
@@ -22,6 +26,10 @@
             "name": "linkerd-proxy",
             "resources": {
               "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              },
+              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }

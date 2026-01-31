@@ -1,0 +1,42 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "ollama",
+    "namespace": "ollama"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "linkerd-proxy",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              },
+              "limits": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              }
+            }
+          },
+          {
+            "name": "ollama",
+            "resources": {
+              "requests": {
+                "cpu": "12m",
+                "memory": "1738144563"
+              },
+              "limits": {
+                "cpu": "12m",
+                "memory": "1849648468"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

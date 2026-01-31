@@ -1,0 +1,29 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "vpa-recommender",
+    "namespace": "kube-system"
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "recommender",
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "272061154"
+              },
+              "limits": {
+                "cpu": "25m",
+                "memory": "289515734"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

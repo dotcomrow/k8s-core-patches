@@ -13,8 +13,12 @@
             "name": "idrac6",
             "resources": {
               "requests": {
-                "cpu": "49m",
-                "memory": "865936536"
+                "cpu": "35m",
+                "memory": "671629701"
+              },
+              "limits": {
+                "cpu": "54m",
+                "memory": "969194950"
               }
             }
           },
@@ -22,6 +26,10 @@
             "name": "vault-agent",
             "resources": {
               "requests": {
+                "cpu": "12m",
+                "memory": "125Mi"
+              },
+              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }

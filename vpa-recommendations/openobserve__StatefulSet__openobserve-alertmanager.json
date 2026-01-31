@@ -15,6 +15,10 @@
               "requests": {
                 "cpu": "35m",
                 "memory": "1312092764"
+              },
+              "limits": {
+                "cpu": "52m",
+                "memory": "1396313749"
               }
             }
           }
