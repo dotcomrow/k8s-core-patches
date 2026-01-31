@@ -15,10 +15,6 @@
               "requests": {
                 "cpu": "78m",
                 "memory": "272061154"
-              },
-              "limits": {
-                "cpu": "104m",
-                "memory": "332567147"
               }
             }
           },
@@ -26,10 +22,6 @@
             "name": "pre-pull-share-manager-image",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "125Mi"
-              },
-              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }

@@ -15,10 +15,6 @@
               "requests": {
                 "cpu": "11m",
                 "memory": "87381333"
-              },
-              "limits": {
-                "cpu": "11m",
-                "memory": "87381333"
               }
             }
           },
@@ -28,10 +24,6 @@
               "requests": {
                 "cpu": "11m",
                 "memory": "87381333"
-              },
-              "limits": {
-                "cpu": "11m",
-                "memory": "87381333"
               }
             }
           },
@@ -39,10 +31,6 @@
             "name": "fleet-controller",
             "resources": {
               "requests": {
-                "cpu": "11m",
-                "memory": "87381333"
-              },
-              "limits": {
                 "cpu": "11m",
                 "memory": "87381333"
               }

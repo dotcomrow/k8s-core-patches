@@ -15,10 +15,6 @@
               "requests": {
                 "cpu": "4280m",
                 "memory": "183046954"
-              },
-              "limits": {
-                "cpu": "4793m",
-                "memory": "216762677"
               }
             }
           },
@@ -26,10 +22,6 @@
             "name": "config-reloader",
             "resources": {
               "requests": {
-                "cpu": "12m",
-                "memory": "125Mi"
-              },
-              "limits": {
                 "cpu": "12m",
                 "memory": "125Mi"
               }
