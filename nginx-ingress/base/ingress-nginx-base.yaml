@@ -4,6 +4,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
+    goldilocks.fairwinds.com/enabled: "true"
+    platform.suncoast.systems/autosize: "enabled"
   name: ingress-nginx
 ---
 apiVersion: v1
@@ -480,13 +482,6 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-        resources:
-          requests:
-            cpu: 200m
-            memory: 768Mi
-          limits:
-            cpu: 900m
-            memory: 2Gi
         securityContext:
           allowPrivilegeEscalation: true
           capabilities:
