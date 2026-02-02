@@ -1,3 +1,2 @@
 namespace: goldilocks
-resources:
-  - apply-job.yml
+resources: []
