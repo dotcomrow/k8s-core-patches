@@ -49,18 +49,8 @@ spec:
               
               echo "🔧 Adding container resource limits..."
               kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
-                --type=json \
-                -p='[{"op": "add", "path": "/spec/template/spec/containers/0/resources/limits", "value": {"cpu": "900m", "memory": "2Gi"}}]'
-              
-              echo "🔧 Patching container CPU request..."
-              kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
-                --type=json \
-                -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/requests/cpu", "value": "200m"}]'
-              
-              echo "🔧 Patching container memory request..."
-              kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
-                --type=json \
-                -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/requests/memory", "value": "768Mi"}]'
+                --type=strategic \
+                -p='{"spec":{"template":{"spec":{"containers":[{"name":"controller","resources":{"requests":{"cpu":"200m","memory":"768Mi"},"limits":{"cpu":"900m","memory":"2Gi"}}}]}}}}'
               
               echo "🔧 Patching Helm metadata..."
               kubectl patch deployment ingress-nginx-controller -n ingress-nginx \
